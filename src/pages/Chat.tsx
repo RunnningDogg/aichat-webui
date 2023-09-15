@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import {
-  UploadOutlined,
   PlusOutlined,
   MessageOutlined,
   SendOutlined,
@@ -8,21 +7,12 @@ import {
   DeleteOutlined,
   CheckOutlined,
   CloseOutlined,
+  RightCircleOutlined,
 } from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import {
-  Button,
-  Col,
-  Input,
-  Layout,
-  Menu,
-  Row,
-  Space,
-  theme,
-  Popconfirm,
-} from "antd";
+import { Button, Col, Input, Layout, Menu, Row, theme, Popconfirm } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import PdfFile from "../components/PdfViewer";
+import PageNav from "../components/PageNav";
 
 const { Content, Sider } = Layout;
 
@@ -59,14 +49,22 @@ const App: React.FC = () => {
 
   // console.log(colorBgContainer);
   console.log(menuItems);
+
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
     <Layout>
+      <PageNav />
       <Layout hasSider>
         <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          // onCollapse={(value) => setCollapsed(value)}
           style={{
-            overflow: "auto",
+            // overflow: "auto",
             height: "100vh",
-            position: "fixed",
+            position: "relative",
             left: 0,
             top: 0,
             bottom: 0,
@@ -76,11 +74,34 @@ const App: React.FC = () => {
             // background: colorBgContainer,
           }}
         >
-          <div className="p-2 flex justify-center">
-            <Button icon={<PlusOutlined />} block={true} size="large">
-              Create Chat
-            </Button>
+          {/* 自定义触发 */}
+          <div onClick={() => setCollapsed(!collapsed)}>
+            <RightCircleOutlined
+              // className="text-white "
+              style={{
+                color: "#4096ff",
+                fontSize: "1.5rem",
+                cursor: "pointer",
+                position: "absolute",
+                top: "50%",
+                transform:
+                  "translateY(-50%)" +
+                  (collapsed ? "rotate(0deg)" : "rotate(180deg)"),
+                right: "-12px",
+                zIndex: 100,
+              }}
+              // className={`collapsed ? "rotate-180" : "rotate-0"`}
+            />
           </div>
+          {/* 创建按钮 */}
+          {!collapsed && (
+            <div className="p-2 flex justify-center">
+              <Button icon={<PlusOutlined />} block={true} size="large">
+                Create Chat
+              </Button>
+            </div>
+          )}
+
           <Menu
             mode="inline"
             theme="dark"
@@ -97,6 +118,7 @@ const App: React.FC = () => {
                     {isMenuEdit && item.key === menuActiveIdx ? (
                       <>
                         <Input
+                          className="flex-1"
                           ref={menuInput}
                           value={menuTitle}
                           onChange={(e) => {
@@ -106,7 +128,9 @@ const App: React.FC = () => {
                         {item.key === menuActiveIdx && (
                           <div className="  flex">
                             <Button
-                              icon={<CheckOutlined />}
+                              icon={
+                                <CheckOutlined style={{ color: "#141414" }} />
+                              }
                               ghost
                               style={{ border: "none" }}
                               onClick={() => {
@@ -123,7 +147,9 @@ const App: React.FC = () => {
                               }}
                             />
                             <Button
-                              icon={<CloseOutlined />}
+                              icon={
+                                <CloseOutlined style={{ color: "#141414" }} />
+                              }
                               ghost
                               style={{ border: "none" }}
                               onClick={() => {
@@ -135,11 +161,13 @@ const App: React.FC = () => {
                       </>
                     ) : (
                       <>
-                        <span>{item.label}</span>
+                        <span className="flex-1">{item.label}</span>
                         {item.key === menuActiveIdx && (
-                          <div className=" flex">
+                          <div className="flex">
                             <Button
-                              icon={<EditOutlined />}
+                              icon={
+                                <EditOutlined style={{ color: "#141414" }} />
+                              }
                               ghost
                               style={{ border: "none" }}
                               onClick={() => {
@@ -161,7 +189,11 @@ const App: React.FC = () => {
                               cancelText="No"
                             >
                               <Button
-                                icon={<DeleteOutlined />}
+                                icon={
+                                  <DeleteOutlined
+                                    style={{ color: "#141414" }}
+                                  />
+                                }
                                 ghost
                                 style={{ border: "none" }}
                                 onClick={() => {}}
@@ -178,7 +210,9 @@ const App: React.FC = () => {
           </Menu>
         </Sider>
 
-        <Layout style={{ marginLeft: 200 }}>
+        <Layout
+        //  style={{ marginLeft: 200 }}
+        >
           <Row>
             {/* gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} */}
             <Col span={12}>

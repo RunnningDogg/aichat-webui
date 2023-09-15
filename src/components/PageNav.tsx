@@ -6,13 +6,55 @@ import { theme } from "antd";
 import type { MenuProps } from "antd";
 import { useAuth } from "../context/AuthContext";
 
+const NavItems = () => {
+  return (
+    <Menu
+      // style={{ width: "30%" }}
+      theme="light"
+      mode="horizontal"
+      className="mr-10"
+    >
+      <Menu.Item key="1">
+        <NavLink
+          to="/knowledge"
+          className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "text-geek-400" : ""
+          }
+        >
+          知识集市
+        </NavLink>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <NavLink
+          to="/c"
+          className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "text-geek-400" : ""
+          }
+        >
+          对话
+        </NavLink>
+      </Menu.Item>
+      <Menu.Item key="3">
+        <NavLink
+          to="/upload"
+          className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "text-geek-400" : ""
+          }
+        >
+          上传
+        </NavLink>
+      </Menu.Item>
+    </Menu>
+  );
+};
+
 function PageNav() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   const { user, isAuthenticated, logout } = useAuth();
-  // console.log(user, isAuthenticated);
+
   const navigate = useNavigate();
   const items: MenuProps["items"] = [
     {
@@ -47,20 +89,50 @@ function PageNav() {
       </Link>
 
       <div className="flex items-center gap-2">
-        <Menu
+        <div
           // style={{ width: "30%" }}
-          theme="light"
-          mode="horizontal"
-          className="mr-10"
-          // defaultSelectedKeys={["2"]}
+
+          className="mr-10 flex gap-5"
         >
-          <Menu.Item key="1">
-            <NavLink to="/knowledge">知识集市</NavLink>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <NavLink to="/c">对话</NavLink>
-          </Menu.Item>
-        </Menu>
+          <NavLink
+            to="/knowledge"
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "text-geek-400 border-b border-b-geek-400 border-bottom"
+                : "text-slate-600"
+            }
+          >
+            <span className="text-base">知识集市</span>
+          </NavLink>
+
+          <NavLink
+            to="/c"
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "text-geek-400 border-b border-b-geek-400 border-bottom"
+                : "text-slate-600"
+            }
+          >
+            <span className="text-base">对话</span>
+          </NavLink>
+
+          <NavLink
+            to="/upload"
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "pending"
+                : isActive
+                ? "text-geek-400 border-b border-b-geek-400 border-bottom"
+                : "text-slate-600"
+            }
+          >
+            <span className="text-base">上传</span>
+          </NavLink>
+        </div>
         {/* // 如果用户未登录，显示登录按钮 */}
         {isAuthenticated ? (
           <Dropdown menu={{ items }} placement="bottom">

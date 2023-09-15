@@ -88,7 +88,7 @@ function PdfFile() {
           }}
         >
           <Viewer
-            fileUrl="/public/ts.pdf"
+            fileUrl=" /ts.pdf"
             // fileUrl="https://typora728.oss-cn-beijing.aliyuncs.com/pdf/ts.pdf"
             plugins={[
               // Register plugins

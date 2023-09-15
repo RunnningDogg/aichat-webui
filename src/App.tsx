@@ -3,6 +3,8 @@ import HomePage from "./pages/HomePage";
 import Chat from "./pages/Chat";
 import Error from "./pages/Error";
 import Knowledges from "./pages/Knowledges";
+import UploadPage from "./pages/upload/Uploadpage";
+import HomePage2 from "./pages/HomePage2";
 import { ConfigProvider } from "antd";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
@@ -21,6 +23,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route index element={<HomePage />} />
+            <Route path="home" element={<HomePage2 />} />
+            <Route path="upload" element={<UploadPage />} />
             <Route path="c" element={<Chat />}>
               <Route path=":id" element={<Chat />} />
             </Route>
