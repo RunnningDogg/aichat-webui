@@ -11,3 +11,7 @@
 .border-bottom-nav {
   border-bottom: 1px solid #597ef7;
 }
+
+a.active {
+  color: #597ef7;
+}

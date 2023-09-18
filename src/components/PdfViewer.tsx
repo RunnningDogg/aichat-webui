@@ -84,7 +84,7 @@ function PdfFile() {
         <div
           style={{
             border: "1px solid rgba(0, 0, 0, 0.3)",
-            height: "100vh",
+            height: "calc(100vh - 4rem)",
           }}
         >
           <Viewer

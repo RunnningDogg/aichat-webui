@@ -66,8 +66,8 @@ function PageNav() {
   return (
     <Header
       style={{
-        position: "sticky",
-        top: 0,
+        // position: "sticky",
+        // top: 0,
         zIndex: 1,
         width: "100%",
         display: "flex",
@@ -78,14 +78,14 @@ function PageNav() {
       }}
     >
       {/* <div className="demo-logo" /> */}
-      <Link to="/" className="flex items-center gap-2">
+      <Link to="/" className="  flex items-center gap-2">
         <img
           src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
           height="32"
           width="32"
           alt="logo"
         />
-        <span className=" text-black font-semibold  text-xl ">ChatRepo</span>
+        <span className=" text-xl font-semibold  text-black ">ChatRepo</span>
       </Link>
 
       <div className="flex items-center gap-2">
@@ -96,12 +96,10 @@ function PageNav() {
         >
           <NavLink
             to="/knowledge"
-            className={({ isActive, isPending }) =>
-              isPending
-                ? "pending"
-                : isActive
-                ? "text-geek-400 border-b border-b-geek-400 border-bottom"
-                : "text-slate-600"
+            className={({ isActive }) =>
+              isActive
+                ? "active border-bottom border-b-2 border-b-geek-400 text-pink-100"
+                : ""
             }
           >
             <span className="text-base">知识集市</span>
@@ -109,25 +107,21 @@ function PageNav() {
 
           <NavLink
             to="/c"
-            className={({ isActive, isPending }) =>
-              isPending
-                ? "pending"
-                : isActive
-                ? "text-geek-400 border-b border-b-geek-400 border-bottom"
-                : "text-slate-600"
+            className={({ isActive }) =>
+              isActive
+                ? "active border-bottom border-b-2 border-b-geek-400 text-geek-400"
+                : ""
             }
           >
-            <span className="text-base">对话</span>
+            <span className="text-base  ">对话</span>
           </NavLink>
 
           <NavLink
             to="/upload"
-            className={({ isActive, isPending }) =>
-              isPending
-                ? "pending"
-                : isActive
-                ? "text-geek-400 border-b border-b-geek-400 border-bottom"
-                : "text-slate-600"
+            className={({ isActive }) =>
+              isActive
+                ? "active border-bottom border-b-2 border-b-geek-400 text-geek-400"
+                : ""
             }
           >
             <span className="text-base">上传</span>
