@@ -1,5 +1,12 @@
-import { createContext, useContext, useReducer, ReactNode } from "react";
-import axios from "axios";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  // useReducer,
+  useState,
+} from "react";
+// import axios from "axios";
+
 /**
  * 1. 创建Context
  * 2. 定义reducer func
@@ -8,83 +15,52 @@ import axios from "axios";
  * 5. 创建Consumer
  */
 
+interface UserState {
+  name: string;
+  email: string;
+}
+
 interface LoginState {
-  user: {
-    name: string;
-    email: string;
-    password: string;
-    avatar: string;
-  } | null;
-  isAuthenticated: boolean;
-  login: (name: string, password: string) => void;
-  logout: () => void;
+  user: UserState | null;
+  accessToken: string;
+  setAccessToken: (token: string) => void;
+  setCurrentUser: (user: UserState | null) => void;
 }
 
 const initialState = {
   user: null,
-  isAuthenticated: false,
+  accessToken: "",
 };
 
 // (1) create Context
 const AuthContext = createContext<LoginState>(initialState);
 
-// 定义reducer func
-const authReducer = (state, action) => {
-  switch (action.type) {
-    case "LOGIN":
-      return {
-        ...state,
-        user: action.payload,
-        isAuthenticated: true,
-      };
-    case "LOGOUT":
-      return {
-        ...state,
-        user: null,
-        isAuthenticated: false,
-      };
-    default:
-      return state;
-  }
-};
-
-const FAKE_USER = {
-  name: "tony",
-  email: "tony@163.com",
-  password: "123456",
-  avatar: "https://i.pravatar.cc/100?u=zz",
-};
-
 // 3. 创建Provider
-function AuthProvider({ children }) {
-  const [{ user, isAuthenticated }, dispatch] = useReducer(
-    authReducer,
-    initialState
-  );
+interface AuthProviderProps {
+  children: ReactNode;
+}
+function AuthProvider({ children }: AuthProviderProps) {
+  const [accessToken, setAccessToken] = useState("");
+  const [currentUser, setCurrentUser] = useState<UserState | null>(null);
 
-  function login(name: string, password: string) {
-    console.log(name, password);
-    axios.get("api/users").then((res) => {
-      console.log(res.data);
-      res.data.map((data) => {
-        if (data.name === name && data.password === password) {
-          dispatch({
-            type: "LOGIN",
-            payload: data,
-          });
-        }
-      });
-    });
+  // 对外暴露set的能力
+  function setNewAccessToken(token: string) {
+    setAccessToken(token);
   }
 
-  function logout() {
-    dispatch({
-      type: "LOGOUT",
-    });
+  function setNewCurrentUser(user: UserState | null) {
+    setCurrentUser(user);
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        accessToken,
+        user: currentUser,
+        setAccessToken: setNewAccessToken,
+        setCurrentUser: setNewCurrentUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

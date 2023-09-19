@@ -50,6 +50,7 @@ const App: React.FC = () => {
                       bordered={false}
                       extra={<a href="#">Chat {index}</a>}
                       hoverable={true}
+                      key={index}
                     >
                       Card {item}
                     </Card>
@@ -62,6 +63,7 @@ const App: React.FC = () => {
                   bordered={false}
                   extra={<a href="#">Chat</a>}
                   hoverable={true}
+                  key={111}
                 >
                   Card content
                 </Card>
@@ -72,6 +74,7 @@ const App: React.FC = () => {
                   bordered={false}
                   extra={<a href="#">Chat</a>}
                   hoverable={true}
+                  key={222}
                 >
                   Card content
                 </Card>
@@ -82,6 +85,7 @@ const App: React.FC = () => {
                   bordered={false}
                   extra={<a href="#">Chat</a>}
                   hoverable={true}
+                  key={333}
                 >
                   Card content
                 </Card>

@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { Content } from "antd/es/layout/layout";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 type LoginParams = {
   name: string;
@@ -12,31 +13,57 @@ type LoginParams = {
 
 function Login() {
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { setAccessToken, setCurrentUser } = useAuth();
   const [buttonLoading, setButtonLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const messageInfo = () => {
-    if (isAuthenticated) {
-      messageApi.success("登录成功, 即将跳转到主页");
-    } else {
-      messageApi.error("登录失败, 请检查用户名和密码");
-    }
-  };
 
   // navigate 在 useEffect做
-  useEffect(() => {
-    if (isAuthenticated) {
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 1500);
-    }
-  }, [isAuthenticated, navigate]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     setTimeout(() => {
+  //       navigate("/", { replace: true });
+  //     }, 1500);
+  //   }
+  // }, [isAuthenticated, navigate]);
 
-  const onFinish = (values: LoginParams) => {
-    setButtonLoading(true);
-    console.log("Received values of form: ", values);
-    login(values?.name, values?.password);
-    setButtonLoading(false);
+  const onFinish = async (values: LoginParams) => {
+    try {
+      setButtonLoading(true);
+      const res = await axios.post(
+        "api/users/token",
+        {
+          username: values.name,
+          password: values.password,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      if (res.status === 200) {
+        setAccessToken(res.data.access_token);
+
+        const userRes = await axios.get("api/users/current", {
+          headers: {
+            Authorization: `Bearer ${res.data.access_token}`,
+          },
+        });
+        setCurrentUser(userRes.data);
+        messageApi.success("登录成功, 即将跳转到主页");
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 2000);
+      } else {
+        console.log("error");
+        messageApi.error("登录失败");
+      }
+    } catch (error) {
+      console.log(error);
+      messageApi.error("登录失败");
+    } finally {
+      setButtonLoading(false);
+    }
   };
 
   return (
@@ -52,7 +79,7 @@ function Login() {
         }}
       >
         <div
-          className="flex items-center gap-3 mb-10"
+          className="mb-10 flex items-center gap-3"
           style={{ transform: "translate(0,-50%)" }}
         >
           <img
@@ -61,17 +88,7 @@ function Login() {
             width="32"
             alt="logo"
           />
-          <span className=" text-black font-semibold  text-xl ">ChatRepo</span>
-          <Button
-            onClick={() => {
-              setButtonLoading(true);
-              setTimeout(() => {
-                setButtonLoading(false);
-              }, 2000);
-            }}
-          >
-            Click Me
-          </Button>
+          <span className=" text-xl font-semibold  text-black ">ChatRepo</span>
         </div>
 
         <Form

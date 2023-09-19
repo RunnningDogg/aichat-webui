@@ -53,13 +53,23 @@ function PageNav() {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, accessToken, setAccessToken, setCurrentUser } = useAuth();
 
   const navigate = useNavigate();
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: <a onClick={logout}>登出</a>,
+      label: (
+        <a
+          onClick={() => {
+            setAccessToken("");
+            setCurrentUser(null);
+            navigate("/login");
+          }}
+        >
+          登出
+        </a>
+      ),
     },
   ];
 
@@ -128,7 +138,7 @@ function PageNav() {
           </NavLink>
         </div>
         {/* // 如果用户未登录，显示登录按钮 */}
-        {isAuthenticated ? (
+        {accessToken ? (
           <Dropdown menu={{ items }} placement="bottom">
             <Avatar
               style={{

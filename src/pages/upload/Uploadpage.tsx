@@ -8,16 +8,16 @@ function Page() {
   return (
     <Layout>
       <PageNav />
-      <Content>
+      <Content className="h-[80vh]">
         <div className="flex flex-col gap-6  ">
-          <h1 className="mt-24 text-3xl font-bold text-center">上传文档</h1>
-          <p className="  text-md text-slate-300 text-center">
+          <h1 className="mt-24 text-center text-3xl font-bold">上传文档</h1>
+          <p className="  text-md text-center text-slate-300">
             上传您的文档, 开始对话
           </p>
           <div className="mx-auto">
             <UploadDragger />
           </div>
-          <div className="mt-10 mx-auto ">
+          <div className="mx-auto mt-10 ">
             <FileTable />
           </div>
         </div>
