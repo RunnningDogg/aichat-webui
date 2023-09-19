@@ -55,7 +55,7 @@ function Marked() {
     // Render the highlighted code with `hljs` class.
 
     const copyButton =
-      '<button class="copy-btn rounded px-2 py-1 bg-geek-300 hover:bg-geek-00 absolute top-1 right-1"> Copy</button>';
+      '<button class="copy-btn rounded px-2 py-1 bg-slate-500 hover:bg-slate-600 absolute top-1 right-1"> Copy</button>';
 
     return `<pre class="relative"> ${copyButton} <code class="hljs ${language}">${highlighted}</code></pre>`;
   };

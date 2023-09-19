@@ -1,11 +1,13 @@
 import PageNav from "../components/PageNav";
 import { Button } from "antd";
+import { getFiles } from "../services/apiFiles";
 
 import {
   DatabaseOutlined,
   SafetyOutlined,
   FileSearchOutlined,
 } from "@ant-design/icons";
+import { useEffect } from "react";
 
 const features = [
   {
@@ -29,6 +31,14 @@ const features = [
 ];
 
 export default function Home() {
+  useEffect(() => {
+    async function call() {
+      const data = await getFiles();
+      console.log(data);
+    }
+    call();
+  }, []);
+
   return (
     <main className="flex min-h-screen w-screen flex-col ">
       {/* navbar */}
