@@ -15,6 +15,7 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Chat from "./pages/ChatPage/Chat";
 import Marked from "./pages/MarkdownPlayground/Marked";
+import Demo from "./pages/Demo";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,6 +53,7 @@ function App() {
                 </Route>
                 <Route path="knowledge" element={<Knowledges />} />
                 <Route path="login" element={<Login />} />
+                <Route path="demo" element={<Demo />} />
                 <Route path="*" element={<Error />} />
               </Routes>
             </BrowserRouter>
