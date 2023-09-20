@@ -85,9 +85,9 @@ const App: React.FC = () => {
     try {
       setLoading(true);
       const res = await myAxios.get("api/file/query", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${accessToken}`,
+        // },
       });
       setFilesData(res.data.data);
       console.log(res);

@@ -3,8 +3,10 @@ import { Button, Checkbox, Form, Input, Layout, message } from "antd";
 import { useAuth } from "../context/AuthContext";
 import { Content } from "antd/es/layout/layout";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+// import axios from "axios";
+import myAxios from "../services/axios";
+import { setGlobalAccessToken } from "../utils/auth";
 
 type LoginParams = {
   name: string;
@@ -17,19 +19,10 @@ function Login() {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
 
-  // navigate 在 useEffect做
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     setTimeout(() => {
-  //       navigate("/", { replace: true });
-  //     }, 1500);
-  //   }
-  // }, [isAuthenticated, navigate]);
-
   const onFinish = async (values: LoginParams) => {
     try {
       setButtonLoading(true);
-      const res = await axios.post(
+      const res = await myAxios.post(
         "api/users/token",
         {
           username: values.name,
@@ -43,11 +36,11 @@ function Login() {
       );
       if (res.status === 200) {
         setAccessToken(res.data.access_token);
-
-        const userRes = await axios.get("api/users/current", {
-          headers: {
-            Authorization: `Bearer ${res.data.access_token}`,
-          },
+        setGlobalAccessToken(res.data.access_token);
+        const userRes = await myAxios.get("api/users/current", {
+          // headers: {
+          //   Authorization: `Bearer ${res.data.access_token}`,
+          // },
         });
         setCurrentUser(userRes.data);
         messageApi.success("登录成功, 即将跳转到主页");
