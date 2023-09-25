@@ -101,6 +101,7 @@ function Login() {
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               placeholder="Username"
+              size="large"
             />
           </Form.Item>
           <Form.Item
@@ -111,6 +112,7 @@ function Login() {
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
               placeholder="Password"
+              size="large"
             />
           </Form.Item>
           <Form.Item>
