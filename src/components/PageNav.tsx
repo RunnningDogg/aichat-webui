@@ -85,6 +85,7 @@ function PageNav() {
         justifyContent: "space-between",
         backgroundColor: colorBgContainer,
         height: "4rem",
+        borderBottom: "1px solid #f0f0f0",
       }}
     >
       {/* <div className="demo-logo" /> */}

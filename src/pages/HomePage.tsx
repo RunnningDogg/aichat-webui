@@ -157,20 +157,22 @@ export default function Home() {
         </div>
 
         {/*  feature */}
-        <div className="mt-32 h-[65vh] px-12">
-          <div className="feature grid grid-cols-3 gap-6 ">
-            {features.map((feature) => (
-              <div
-                key={feature.key}
-                className="flex flex-col gap-8 rounded  border px-8 py-4 hover:border-geek-400"
-              >
-                {feature.icon}
-                <h2 className="text-xl font-semibold">{feature.title}</h2>
-                <p>{feature.description}</p>
-              </div>
-            ))}
+        <FadeInComponent>
+          <div className="mt-32 h-[65vh] px-12">
+            <div className="feature grid grid-cols-3 gap-6 ">
+              {features.map((feature) => (
+                <div
+                  key={feature.key}
+                  className="flex flex-col gap-8 rounded  border px-8 py-4 hover:border-geek-400"
+                >
+                  {feature.icon}
+                  <h2 className="text-xl font-semibold">{feature.title}</h2>
+                  <p>{feature.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </FadeInComponent>
 
         {/* faq */}
         <FadeInComponent>

@@ -7,9 +7,10 @@ import { useAuth } from "../../../context/AuthContext";
 // import axios from "axios";
 import myAxios from "../../../services/axios";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 interface DataType {
-  id: string;
+  file_id: string;
   file_name: string;
   file_url: string;
   user_id: number;
@@ -23,31 +24,6 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: "文件名",
-    dataIndex: "file_name",
-    key: "file_name",
-  },
-  {
-    title: "创建时间",
-    dataIndex: "created_at",
-    key: "created_at",
-    render: (text: string) => <span>{dayjs(text).format("YYYY-MM-DD")}</span>,
-  },
-
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>文档对话</a>
-        <a>Delete {record.file_name}</a>
-      </Space>
-    ),
-  },
-];
-
 const App: React.FC = () => {
   const { accessToken } = useAuth();
   const [filesData, setFilesData] = useState<DataType[]>();
@@ -58,6 +34,32 @@ const App: React.FC = () => {
       pageSize: 10,
     },
   });
+
+  const navigate = useNavigate();
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "文件名",
+      dataIndex: "file_name",
+      key: "file_name",
+    },
+    {
+      title: "创建时间",
+      dataIndex: "created_at",
+      key: "created_at",
+      render: (text: string) => <span>{dayjs(text).format("YYYY-MM-DD")}</span>,
+    },
+
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <a onClick={() => navigate(`/c/${record.file_id}`)}>文档对话</a>
+          <a>Delete {record.file_name}</a>
+        </Space>
+      ),
+    },
+  ];
 
   // useQuery
   // console.log(data);

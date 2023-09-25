@@ -37,7 +37,7 @@ function MessageSideBar() {
   const [isMenuEdit, setIsMenuEdit] = useState(false);
   const [menuTitle, setMenuTitle] = useState("");
   const menuInput = useRef(null);
-  const { id } = useParams();
+  const { file_id } = useParams();
 
   // console.log(colorBgContainer);
   // console.log(menuItems);
