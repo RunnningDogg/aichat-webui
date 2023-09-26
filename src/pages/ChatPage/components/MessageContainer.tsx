@@ -2,6 +2,7 @@ import { Avatar, Input, Layout, Spin } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 const { Content } = Layout;
+
 const arr = Array.from({ length: 10 }, (_, i) => i + 1);
 
 function MessageContainer() {

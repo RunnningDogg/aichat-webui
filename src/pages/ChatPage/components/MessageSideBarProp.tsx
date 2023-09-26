@@ -27,6 +27,24 @@ type MessageSideBarProps = {
   // setMenuActiveIdx: React.Dispatch<React.SetStateAction<string>> // 父组件的函数, 触发修改, 路由就可以设置了
 };
 
+// import type { MenuProps } from 'antd';
+// type MenuItem = Required<MenuProps>['items'][number];
+// function getItem(
+//   label: React.ReactNode,
+//   key: React.Key,
+//   icon?: React.ReactNode,
+//   children?: MenuItem[],
+//   type?: 'group',
+// ): MenuItem {
+//   return {
+//     key,
+//     icon,
+//     children,
+//     label,
+//     type,
+//   } as MenuItem;
+// }
+
 function MessageSideBar({ chatfile, menuActiveIdx }: MessageSideBarProps) {
   const navigate = useNavigate();
 

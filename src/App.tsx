@@ -14,8 +14,9 @@ import UploadPage from "./pages/upload/Uploadpage";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Chat from "./pages/ChatPage/Chat";
-import Marked from "./pages/MarkdownPlayground/Marked";
+import Marked from "./pages/MarkdownPlayground/MarkedWithCode";
 import Demo from "./pages/Demo";
+import MarkedChat from "./pages/MarkdownPlayground/MarkedChat";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +48,7 @@ function App() {
                 <Route index element={<HomePage />} />
                 <Route path="sidebar" element={<HomePageWithSideBar />} />
                 <Route path="marked" element={<Marked />} />
+                <Route path="markedpage" element={<MarkedChat />} />
                 <Route path="upload" element={<UploadPage />} />
                 <Route path="c" element={<Chat />}>
                   <Route path=":id" element={<Chat />} />
