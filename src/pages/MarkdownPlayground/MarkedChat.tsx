@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import AIMessage from "../ChatPage/components/AIMessage";
 import UserMessage from "../ChatPage/components/UserMessage";
-import { Input, message } from "antd";
+import { Button, Input, Tooltip, message } from "antd";
+import { SendOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
@@ -25,11 +26,14 @@ function MarkedChat() {
 
       // 获取光标位置和行号
       // inputRef.current?.focus();
-      inputRef.current!.scrollTop = inputRef?.current?.scrollHeight || 0;
+      // const area = inputRef.current!;
+      // area.scrollTop = area.scrollHeight;
     } else if (e.key === "Enter") {
       e.preventDefault();
-      console.log("enter");
       messageApi.success("enter 准备发送");
+      setInputText("");
+      // console.log("enter");
+      // messageApi.success("enter 准备发送");
     }
   };
 
@@ -43,16 +47,39 @@ function MarkedChat() {
         <AIMessage key="chat4" rawMessage={rawMessage} />
       </div>
 
-      <div className="absolute inset-x-0 bottom-2 right-0 -translate-y-1/2  ">
-        <div className="mx-auto flex flex-col rounded-xl border border-black/10 lg:max-w-xl">
-          <textarea
-            className="resize-none overflow-hidden border-0 bg-transparent py-[10px] pl-3 outline-0 focus:ring-0 focus-visible:ring-0"
+      <div className="">
+        {/* absolute inset-x-0 bottom-2 right-0 -translate-y-1/2   */}
+        <div className="mx-auto flex items-center gap-3 lg:max-w-xl">
+          {/* rounded-xl border border-black/10 */}
+          {/* <textarea
+            className=" w-full resize-none overflow-hidden border-0 bg-transparent py-3 pl-3 outline-0 focus:ring-0 focus-visible:ring-0"
+            style={{
+              maxHeight: "56px",
+              height: "100px",
+              overflowY: "hidden",
+            }}
             placeholder="input question"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
             ref={inputRef}
+          /> */}
+          <TextArea
+            value={inputText}
+            onChange={(e) => {
+              setInputText(e.target.value);
+            }}
+            allowClear
+            autoSize
+            // onPressEnter={() => {
+            //   messageApi.success("enter 准备发送");
+            //   setInputText("");
+            // }}
+            onKeyDown={handleKeyDown}
           />
+          <Button type="primary" icon={<SendOutlined />}>
+            发送
+          </Button>
         </div>
       </div>
     </div>
