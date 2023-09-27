@@ -12,12 +12,12 @@ function UserMessage({ key, rawMessage }: UserMessageProps) {
   return (
     <div
       key={key}
-      className={`flex flex-row-reverse items-start gap-4 rounded px-2 py-3`}
+      className={`flex flex-row-reverse items-center gap-4 rounded px-2 py-1`}
     >
       <Avatar style={{ backgroundColor: "#f56a00" }}>User</Avatar>
 
       <div
-        className="prose   max-w-xl flex-1 rounded-lg border bg-slate-50 px-2 py-4"
+        className=" prose   rounded-lg border bg-slate-50 px-[10px] py-[8px]"
         dangerouslySetInnerHTML={{ __html: renderHtml }}
       ></div>
     </div>

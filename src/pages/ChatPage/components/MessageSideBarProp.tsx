@@ -27,23 +27,31 @@ type MessageSideBarProps = {
   // setMenuActiveIdx: React.Dispatch<React.SetStateAction<string>> // 父组件的函数, 触发修改, 路由就可以设置了
 };
 
-// import type { MenuProps } from 'antd';
-// type MenuItem = Required<MenuProps>['items'][number];
-// function getItem(
-//   label: React.ReactNode,
-//   key: React.Key,
-//   icon?: React.ReactNode,
-//   children?: MenuItem[],
-//   type?: 'group',
-// ): MenuItem {
-//   return {
-//     key,
-//     icon,
-//     children,
-//     label,
-//     type,
-//   } as MenuItem;
-// }
+import type { MenuProps } from "antd";
+type MenuItem = Required<MenuProps>["items"][number];
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  type?: "group",
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  } as MenuItem;
+}
+
+type MenuItemProps = {
+  item: {
+    key: string;
+    label: string;
+  };
+};
 
 function MessageSideBar({ chatfile, menuActiveIdx }: MessageSideBarProps) {
   const navigate = useNavigate();
@@ -55,15 +63,99 @@ function MessageSideBar({ chatfile, menuActiveIdx }: MessageSideBarProps) {
     }
   };
 
+  // menu items 从props转换成db
   const menuItems = chatfile.map((item) => {
     return { key: item.file_id, label: item.file_name };
   });
+
+  console.log(menuItems);
 
   // 组件内状态
   const [isMenuEdit, setIsMenuEdit] = useState(false);
   const [menuTitle, setMenuTitle] = useState("");
   const menuInput = useRef(null);
   const [collapsed, setCollapsed] = useState(false);
+
+  // menu item
+  const MenuLabel = ({ item }: MenuItemProps) => {
+    return (
+      <div className="flex items-center ">
+        {/* <MessageOutlined /> */}
+
+        {isMenuEdit && item.key === menuActiveIdx ? (
+          <>
+            <Input
+              className="flex-1"
+              ref={menuInput}
+              value={menuTitle}
+              onChange={(e) => {
+                setMenuTitle(e.target.value);
+              }}
+            />
+            {item.key === menuActiveIdx && (
+              <div className="  flex">
+                <Button
+                  icon={<CheckOutlined style={{ color: "#141414" }} />}
+                  ghost
+                  style={{ border: "none" }}
+                  onClick={() => {
+                    setIsMenuEdit(false);
+                  }}
+                />
+                <Button
+                  icon={<CloseOutlined style={{ color: "#141414" }} />}
+                  ghost
+                  style={{ border: "none" }}
+                  onClick={() => {
+                    setIsMenuEdit(false);
+                  }}
+                />
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <span className="flex-1">{item.label}</span>
+            {item.key === menuActiveIdx && (
+              <div className="flex">
+                <Button
+                  icon={<EditOutlined style={{ color: "#141414" }} />}
+                  ghost
+                  style={{ border: "none" }}
+                  onClick={() => {
+                    setIsMenuEdit(true);
+                    setMenuTitle(item.label);
+                  }}
+                />
+                <Popconfirm
+                  placement="right"
+                  title=""
+                  description="确定删除记录吗"
+                  onConfirm={() => {
+                    console.log("delete");
+                  }}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button
+                    icon={<DeleteOutlined style={{ color: "#141414" }} />}
+                    ghost
+                    style={{ border: "none" }}
+                    onClick={() => {}}
+                  />
+                </Popconfirm>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    );
+  };
+
+  const items = menuItems.map((item) =>
+    getItem(<MenuLabel item={item} />, item.key, <MessageOutlined />),
+  );
+
   return (
     <Sider
       trigger={null}
@@ -88,7 +180,7 @@ function MessageSideBar({ chatfile, menuActiveIdx }: MessageSideBarProps) {
         <RightCircleOutlined
           // className="text-white "
           style={{
-            color: "#4096ff",
+            color: "#d9d9d9",
             fontSize: "1.5rem",
             cursor: "pointer",
             position: "absolute",
@@ -111,7 +203,7 @@ function MessageSideBar({ chatfile, menuActiveIdx }: MessageSideBarProps) {
         </div>
       )}
 
-      <Menu
+      {/* <Menu
         mode="inline"
         theme="dark"
         defaultSelectedKeys={["4"]}
@@ -121,82 +213,19 @@ function MessageSideBar({ chatfile, menuActiveIdx }: MessageSideBarProps) {
         {menuItems.map((item) => {
           return (
             <Menu.Item key={item.key}>
-              <div className="flex items-center ">
-                <MessageOutlined />
-
-                {isMenuEdit && item.key === menuActiveIdx ? (
-                  <>
-                    <Input
-                      className="flex-1"
-                      ref={menuInput}
-                      value={menuTitle}
-                      onChange={(e) => {
-                        setMenuTitle(e.target.value);
-                      }}
-                    />
-                    {item.key === menuActiveIdx && (
-                      <div className="  flex">
-                        <Button
-                          icon={<CheckOutlined style={{ color: "#141414" }} />}
-                          ghost
-                          style={{ border: "none" }}
-                          onClick={() => {
-                            setIsMenuEdit(false);
-                          }}
-                        />
-                        <Button
-                          icon={<CloseOutlined style={{ color: "#141414" }} />}
-                          ghost
-                          style={{ border: "none" }}
-                          onClick={() => {
-                            setIsMenuEdit(false);
-                          }}
-                        />
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <span className="flex-1">{item.label}</span>
-                    {item.key === menuActiveIdx && (
-                      <div className="flex">
-                        <Button
-                          icon={<EditOutlined style={{ color: "#141414" }} />}
-                          ghost
-                          style={{ border: "none" }}
-                          onClick={() => {
-                            setIsMenuEdit(true);
-                            setMenuTitle(item.label);
-                          }}
-                        />
-                        <Popconfirm
-                          placement="right"
-                          title=""
-                          description="确定删除记录吗"
-                          onConfirm={() => {
-                            console.log("delete");
-                          }}
-                          okText="Yes"
-                          cancelText="No"
-                        >
-                          <Button
-                            icon={
-                              <DeleteOutlined style={{ color: "#141414" }} />
-                            }
-                            ghost
-                            style={{ border: "none" }}
-                            onClick={() => {}}
-                          />
-                        </Popconfirm>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
+              <MenuLabel item={item} />
             </Menu.Item>
           );
         })}
-      </Menu>
+      </Menu> */}
+
+      <Menu
+        mode="inline"
+        theme="dark"
+        // defaultSelectedKeys={["4"]}
+        onClick={handleMenuClick}
+        items={items}
+      ></Menu>
     </Sider>
   );
 }

@@ -17,6 +17,7 @@ import Chat from "./pages/ChatPage/Chat";
 import Marked from "./pages/MarkdownPlayground/MarkedWithCode";
 import Demo from "./pages/Demo";
 import MarkedChat from "./pages/MarkdownPlayground/MarkedChat";
+import ChatWithFileID from "./pages/ChatPage/ChatWithFileID";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,8 +52,9 @@ function App() {
                 <Route path="markedpage" element={<MarkedChat />} />
                 <Route path="upload" element={<UploadPage />} />
                 <Route path="c" element={<Chat />}>
-                  <Route path=":id" element={<Chat />} />
+                  <Route path=":file_id" element={<ChatWithFileID />} />
                 </Route>
+
                 <Route path="knowledge" element={<Knowledges />} />
                 <Route path="login" element={<Login />} />
                 <Route path="demo" element={<Demo />} />

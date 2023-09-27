@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import AIMessage from "../ChatPage/components/AIMessage";
 import UserMessage from "../ChatPage/components/UserMessage";
-import { Button, Input, Tooltip, message } from "antd";
+import { Button, Input, message } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
@@ -16,7 +16,7 @@ function MarkedChat() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [inputText, setInputText] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  // const inputRef = useRef<HTMLInputElement>(null);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && e.shiftKey) {
@@ -70,11 +70,7 @@ function MarkedChat() {
               setInputText(e.target.value);
             }}
             allowClear
-            autoSize
-            // onPressEnter={() => {
-            //   messageApi.success("enter 准备发送");
-            //   setInputText("");
-            // }}
+            autoSize={{ minRows: 1, maxRows: 5 }}
             onKeyDown={handleKeyDown}
           />
           <Button type="primary" icon={<SendOutlined />}>

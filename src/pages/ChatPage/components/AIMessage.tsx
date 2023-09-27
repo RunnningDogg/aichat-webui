@@ -10,11 +10,11 @@ function AIMessage({ key, rawMessage }: AIMessageProps) {
   const renderHtml = marked(rawMessage);
 
   return (
-    <div key={key} className={`flex   items-start gap-4 rounded px-2 py-3`}>
+    <div key={key} className={`flex   items-start gap-4 rounded px-2 py-1`}>
       <Avatar style={{ backgroundColor: "#b37feb" }}>AI</Avatar>
 
       <div
-        className="prose  max-w-xl flex-1 rounded-lg border bg-slate-50 px-2 py-4"
+        className="prose  max-w-md   rounded-lg border bg-slate-50 px-[10px] py-[8px]"
         dangerouslySetInnerHTML={{ __html: renderHtml }}
       ></div>
     </div>
