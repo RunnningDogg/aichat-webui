@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, Col, Layout, Row, theme, Input, message, Button } from "antd";
 import PageNav from "../components/PageNav";
 import myAxios from "../services/axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +14,8 @@ const App: React.FC = () => {
   //   token: { colorBgContainer },
   // } = theme.useToken();
 
+  const queryClient = useQueryClient();
+
   const { data, isLoading, error } = useQuery(
     ["publicknowledges"],
     async () => {
@@ -22,10 +24,10 @@ const App: React.FC = () => {
       return res.data?.data;
     },
   );
-  console.log(data);
+  // console.log(data);
 
-  console.log(isLoading);
-  console.log(error);
+  // console.log(isLoading);
+  // console.log(error);
 
   // 从登录的用户那里拿到useAccess的数据
   const { accessToken, user } = useAuth();
@@ -97,6 +99,7 @@ const App: React.FC = () => {
                             );
                             if (res.status === 200) {
                               messageApi.success("获取知识库文档成功,准备跳转");
+                              queryClient.invalidateQueries();
                               setTimeout(() => {
                                 // nav(`/c/${item.file_id}`);
                                 nav(`/c/`);

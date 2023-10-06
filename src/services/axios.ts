@@ -5,7 +5,7 @@ import { getGlobalAccessToken, setGlobalAccessToken } from "../utils/auth";
 const isDev = process.env.NODE_ENV === "development";
 
 const myAxios = axios.create({
-  baseURL: isDev ? "" : "https://api.runningpig.top",
+  baseURL: isDev ? "" : "",
 });
 // axios.defaults.baseURL = import.meta.env.VITE_API_URL as string;
 
