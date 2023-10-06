@@ -18,6 +18,7 @@ import {
 interface UserState {
   name: string;
   email: string;
+  user_role: number;
 }
 
 interface LoginState {

@@ -13,7 +13,7 @@ import { ReactElement } from "react";
 import { ToolbarProps } from "@react-pdf-viewer/default-layout";
 import { ToolbarSlot } from "@react-pdf-viewer/toolbar";
 
-function PdfFile() {
+function PdfFile({ file_url }: { file_url: string }) {
   const renderToolbar = (Toolbar: (props: ToolbarProps) => ReactElement) => (
     <Toolbar>
       {(slots: ToolbarSlot) => {
@@ -88,8 +88,8 @@ function PdfFile() {
           }}
         >
           <Viewer
-            fileUrl="/ts.pdf"
-            // fileUrl="https://ai-pdf-1259317192.cos.ap-beijing.myqcloud.com/meituan_course.pdf"
+            // fileUrl="/ts.pdf"
+            fileUrl={file_url}
             // fileUrl="https://typora728.oss-cn-beijing.aliyuncs.com/pdf/ts.pdf"
             plugins={[
               // Register plugins

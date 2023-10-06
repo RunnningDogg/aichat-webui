@@ -1,6 +1,7 @@
 import axios from "axios";
 import { message } from "antd";
 import { getGlobalAccessToken, setGlobalAccessToken } from "../utils/auth";
+
 const isDev = process.env.NODE_ENV === "development";
 
 const myAxios = axios.create({
@@ -12,6 +13,7 @@ myAxios.interceptors.request.use(
   (config) => {
     // 在请求头中添加认证信息
     const accessToken = getGlobalAccessToken();
+
     config.headers["Authorization"] = `Bearer ${accessToken}`;
     return config;
   },

@@ -1,22 +1,29 @@
 import { Avatar } from "antd";
-import { marked } from "marked";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 
 type AIMessageProps = {
-  key: string;
   rawMessage: string;
 };
 
-function AIMessage({ key, rawMessage }: AIMessageProps) {
-  const renderHtml = marked(rawMessage);
-
+function AIMessage({ rawMessage }: AIMessageProps) {
   return (
-    <div key={key} className={`flex   items-start gap-4 rounded px-2 py-1`}>
-      <Avatar style={{ backgroundColor: "#b37feb" }}>AI</Avatar>
+    <div className={`flex items-start gap-4 rounded px-2 py-1`}>
+      <Avatar
+        // size="default"
+        // size={{ xs: 12, sm: 24, md: 28, lg: 30, xl: 32, xxl: 40 }}
+        style={{ backgroundColor: "#b37feb" }}
+      >
+        AI
+      </Avatar>
 
-      <div
-        className="prose  max-w-md   rounded-lg border bg-slate-50 px-[10px] py-[8px]"
-        dangerouslySetInnerHTML={{ __html: renderHtml }}
-      ></div>
+      <Markdown
+        className="prose  max-w-sm rounded-lg border bg-slate-50 px-[10px] py-[8px]"
+        remarkPlugins={[remarkGfm, remarkBreaks]}
+      >
+        {rawMessage}
+      </Markdown>
     </div>
   );
 }

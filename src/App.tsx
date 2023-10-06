@@ -18,6 +18,7 @@ import Marked from "./pages/MarkdownPlayground/MarkedWithCode";
 import Demo from "./pages/Demo";
 import MarkedChat from "./pages/MarkdownPlayground/MarkedChat";
 import ChatWithFileID from "./pages/ChatPage/ChatWithFileID";
+import Admin from "./pages/Admin/AdminPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +48,7 @@ function App() {
             <BrowserRouter>
               <Routes>
                 <Route index element={<HomePage />} />
+                <Route path="admin" element={<Admin />} />
                 <Route path="sidebar" element={<HomePageWithSideBar />} />
                 <Route path="marked" element={<Marked />} />
                 <Route path="markedpage" element={<MarkedChat />} />
@@ -54,7 +56,6 @@ function App() {
                 <Route path="c" element={<Chat />}>
                   <Route path=":file_id" element={<ChatWithFileID />} />
                 </Route>
-
                 <Route path="knowledge" element={<Knowledges />} />
                 <Route path="login" element={<Login />} />
                 <Route path="demo" element={<Demo />} />

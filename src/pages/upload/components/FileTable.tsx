@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table } from "antd";
+import { Button, Popconfirm, Space, Table, message } from "antd";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
-import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "../../../context/AuthContext";
-// import axios from "axios";
 import myAxios from "../../../services/axios";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DataType {
   file_id: string;
   file_name: string;
   file_url: string;
   user_id: number;
-  created_at: Date;
+  create_time: Date;
+  file_status: number;
 }
 
 interface TableParams {
@@ -25,7 +24,8 @@ interface TableParams {
 }
 
 const App: React.FC = () => {
-  const { accessToken } = useAuth();
+  const queryClient = useQueryClient();
+
   const [filesData, setFilesData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -34,6 +34,31 @@ const App: React.FC = () => {
       pageSize: 10,
     },
   });
+
+  const cancel = (e: React.MouseEvent<HTMLElement> | undefined) => {
+    console.log(e);
+    message.info("取消公开文件");
+  };
+
+  const handlePublicFiles = async (file_id: string) => {
+    const res = await myAxios.post(
+      "/api/file/public",
+      {
+        file_id: file_id,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    if (res.status === 200) {
+      message.success("文档公开成功!");
+      queryClient.invalidateQueries(["publicknowledges"]);
+    } else {
+      message.error("文档公开失败");
+    }
+  };
 
   const navigate = useNavigate();
   const columns: ColumnsType<DataType> = [
@@ -44,9 +69,15 @@ const App: React.FC = () => {
     },
     {
       title: "创建时间",
-      dataIndex: "created_at",
-      key: "created_at",
-      render: (text: string) => <span>{dayjs(text).format("YYYY-MM-DD")}</span>,
+      dataIndex: "creat_time",
+      key: "creat_time",
+      render: (_, record) => {
+        // console.log(record);
+        // console.log(record.create_time);
+        // console.log(dayjs(record.create_time).format("YYYY-MM-DD"));
+
+        return <span>{dayjs(record.create_time).format("YYYY-MM-DD")}</span>;
+      },
     },
 
     {
@@ -55,7 +86,19 @@ const App: React.FC = () => {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => navigate(`/c/${record.file_id}`)}>文档对话</a>
-          <a>Delete {record.file_name}</a>
+          <a>删除</a>
+          {record.file_status === 0 ? (
+            <Popconfirm
+              onConfirm={() => handlePublicFiles(record.file_id)}
+              onCancel={cancel}
+              title="公开该问的那个"
+              description="索引公开,方便用户进行文档问答, 但是不会公开聊天记录,确定吗?"
+            >
+              <Button>公开该文档</Button>
+            </Popconfirm>
+          ) : (
+            <span>已经公开该文档</span>
+          )}
         </Space>
       ),
     },
@@ -86,13 +129,11 @@ const App: React.FC = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await myAxios.get("api/file/query", {
-        // headers: {
-        //   Authorization: `Bearer ${accessToken}`,
-        // },
-      });
+      const res = await myAxios.get("api/file/query?type=table", {});
+      console.log(res.data.data);
+
       setFilesData(res.data.data);
-      console.log(res);
+      // console.log(res);
 
       setTableParams({
         ...tableParams,
@@ -128,10 +169,13 @@ const App: React.FC = () => {
     }
   };
 
+  // console.log(filesData);
+  // console.log(dayjs("2023-10-02T02:22:50").format("YYYY-MM-DD"));
+
   return (
     <Table
       columns={columns}
-      rowKey={(record) => record.id}
+      rowKey={(record) => record.file_id}
       dataSource={filesData}
       pagination={tableParams.pagination}
       loading={loading}

@@ -1,25 +1,30 @@
 import { Avatar } from "antd";
-import { marked } from "marked";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 
 type UserMessageProps = {
-  key: string;
   rawMessage: string;
 };
 
-function UserMessage({ key, rawMessage }: UserMessageProps) {
-  const renderHtml = marked(rawMessage);
-
+function UserMessage({ rawMessage }: UserMessageProps) {
   return (
     <div
-      key={key}
       className={`flex flex-row-reverse items-center gap-4 rounded px-2 py-1`}
     >
-      <Avatar style={{ backgroundColor: "#f56a00" }}>User</Avatar>
+      <Avatar
+        style={{ backgroundColor: "#f56a00" }}
+        // size={{ xs: 12, sm: 24, md: 28, lg: 30, xl: 32, xxl: 40 }}
+      >
+        User
+      </Avatar>
 
-      <div
-        className=" prose   rounded-lg border bg-slate-50 px-[10px] py-[8px]"
-        dangerouslySetInnerHTML={{ __html: renderHtml }}
-      ></div>
+      <Markdown
+        className="prose  max-w-md rounded-lg border bg-slate-50 px-[10px] py-[8px]"
+        remarkPlugins={[remarkGfm, remarkBreaks]}
+      >
+        {rawMessage}
+      </Markdown>
     </div>
   );
 }

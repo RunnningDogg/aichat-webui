@@ -1,14 +1,42 @@
 import React, { useState } from "react";
-import { Card, Col, Layout, Row, theme, Input } from "antd";
+import { Card, Col, Layout, Row, theme, Input, message, Button } from "antd";
 import PageNav from "../components/PageNav";
+import myAxios from "../services/axios";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const { Content } = Layout;
 const { Search } = Input;
 
 const App: React.FC = () => {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  // const {
+  //   token: { colorBgContainer },
+  // } = theme.useToken();
+
+  const { data, isLoading, error } = useQuery(
+    ["publicknowledges"],
+    async () => {
+      const res = await myAxios.get("/api/file/public");
+      console.log(res);
+      return res.data?.data;
+    },
+  );
+  console.log(data);
+
+  console.log(isLoading);
+  console.log(error);
+
+  // 从登录的用户那里拿到useAccess的数据
+  const { accessToken, user } = useAuth();
+  const [messageApi, contextHolder] = message.useMessage();
+  const nav = useNavigate();
+  if (!user || !accessToken) {
+    messageApi.error("未登录状态, 即将跳转到登录页面");
+    setTimeout(() => {
+      nav("/login", { replace: true });
+    }, 2000);
+  }
 
   const [searchBarLoading, setSearchBarLoading] = useState(false);
 
@@ -20,8 +48,13 @@ const App: React.FC = () => {
     }, 2000);
   };
 
+  if (isLoading) {
+    return <div>loading...</div>;
+  }
+
   return (
     <Layout className="layout">
+      {contextHolder}
       <PageNav />
       <Content style={{ height: "100vh" }}>
         <div
@@ -42,54 +75,46 @@ const App: React.FC = () => {
             }
           >
             <Row gutter={[16, 24]}>
-              {[1, 2, 3, 4, 5, 6].map((item, index) => {
+              {data.map((item, index) => {
                 return (
                   <Col span={8}>
                     <Card
-                      title="文档1"
+                      title="文档"
                       bordered={false}
-                      extra={<a href="#">Chat {index}</a>}
+                      extra={
+                        <Button
+                          onClick={async () => {
+                            const res = await myAxios.post(
+                              "/api/file/public/chat",
+                              {
+                                file_id: item.file_id,
+                              },
+                              {
+                                headers: {
+                                  ContentType: "application/json",
+                                },
+                              },
+                            );
+                            if (res.status === 200) {
+                              messageApi.success("获取知识库文档成功,准备跳转");
+                              setTimeout(() => {
+                                // nav(`/c/${item.file_id}`);
+                                nav(`/c/`);
+                              }, 2000);
+                            }
+                          }}
+                        >
+                          Chat
+                        </Button>
+                      }
                       hoverable={true}
                       key={index}
                     >
-                      Card {item}
+                      {item.file_name}
                     </Card>
                   </Col>
                 );
               })}
-              <Col span={8}>
-                <Card
-                  title="文档1"
-                  bordered={false}
-                  extra={<a href="#">Chat</a>}
-                  hoverable={true}
-                  key={111}
-                >
-                  Card content
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  title="文档2"
-                  bordered={false}
-                  extra={<a href="#">Chat</a>}
-                  hoverable={true}
-                  key={222}
-                >
-                  Card content
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  title="文档3"
-                  bordered={false}
-                  extra={<a href="#">Chat</a>}
-                  hoverable={true}
-                  key={333}
-                >
-                  Card content
-                </Card>
-              </Col>
             </Row>
           </Card>
         </div>

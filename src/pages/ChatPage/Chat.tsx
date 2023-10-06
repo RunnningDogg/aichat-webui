@@ -5,10 +5,22 @@ import PdfFile from "../../components/PdfViewer";
 import PageNav from "../../components/PageNav";
 import MessageSideBar from "./components/MessageSideBarProp";
 
+type FileItem = {
+  create_time: string;
+  file_id: string;
+  file_name: string;
+  file_url: string;
+  user_id: number;
+};
+
+type ContextType = {
+  fileData: FileItem[];
+};
+
 // 引入axios以及react query
 import myAxios from "../../services/axios";
 import { useQuery } from "@tanstack/react-query";
-import { Outlet } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
 
 const App: React.FC = () => {
   // const {
@@ -24,16 +36,20 @@ const App: React.FC = () => {
    * 具体哪个文件应该是active的，应该是父组件传递给子组件，并且父组件传递activeIndex,和set的函数下去
    */
 
-  const { error, data, isLoading } = useQuery(["sidebar"], () =>
-    myAxios.get("/api/file/query").then((res) => res.data?.data),
+  const {
+    error,
+    data: fileData,
+    isLoading,
+  } = useQuery(["sidebar"], () =>
+    myAxios.get("/api/file/query?type=sidebar").then((res) => res.data?.data),
   );
 
   if (error) {
     console.log("react query error");
     return <div>error</div>;
   }
-  if (data) {
-    console.log("react query data ", data);
+  if (fileData) {
+    console.log("react query data ", fileData);
   }
 
   if (isLoading) {
@@ -45,18 +61,9 @@ const App: React.FC = () => {
     <Layout>
       <PageNav />
       <Layout hasSider>
-        <MessageSideBar chatfile={data} menuActiveIdx="" />
+        <MessageSideBar chatfile={fileData} menuActiveIdx="" />
         <Layout>
-          <Row>
-            <Col span={12}>
-              <PdfFile />
-            </Col>
-
-            <Col span={12}>
-              {/* <MessageContainer /> */}
-              <Outlet />
-            </Col>
-          </Row>
+          <Outlet context={{ fileData } satisfies ContextType} />
         </Layout>
       </Layout>
     </Layout>
@@ -64,3 +71,7 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+export function useFileData() {
+  return useOutletContext<ContextType>();
+}

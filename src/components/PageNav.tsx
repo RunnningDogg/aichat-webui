@@ -1,54 +1,57 @@
-import { Avatar, Button, Dropdown, Layout, Menu } from "antd";
+import { Avatar, Button, Dropdown, Layout, Menu, message } from "antd";
 
 const { Header } = Layout;
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { theme } from "antd";
 import type { MenuProps } from "antd";
 import { useAuth } from "../context/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
 
-const NavItems = () => {
-  return (
-    <Menu
-      // style={{ width: "30%" }}
-      theme="light"
-      mode="horizontal"
-      className="mr-10"
-    >
-      <Menu.Item key="1">
-        <NavLink
-          to="/knowledge"
-          className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "text-geek-400" : ""
-          }
-        >
-          知识集市
-        </NavLink>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <NavLink
-          to="/c"
-          className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "text-geek-400" : ""
-          }
-        >
-          对话
-        </NavLink>
-      </Menu.Item>
-      <Menu.Item key="3">
-        <NavLink
-          to="/upload"
-          className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "text-geek-400" : ""
-          }
-        >
-          上传
-        </NavLink>
-      </Menu.Item>
-    </Menu>
-  );
-};
+// const NavItems = () => {
+//   return (
+//     <Menu
+//       // style={{ width: "30%" }}
+//       theme="light"
+//       mode="horizontal"
+//       className="mr-10"
+//     >
+//       <Menu.Item key="1">
+//         <NavLink
+//           to="/knowledge"
+//           className={({ isActive, isPending }) =>
+//             isPending ? "pending" : isActive ? "text-geek-400" : ""
+//           }
+//         >
+//           知识集市
+//         </NavLink>
+//       </Menu.Item>
+//       <Menu.Item key="2">
+//         <NavLink
+//           to="/c"
+//           className={({ isActive, isPending }) =>
+//             isPending ? "pending" : isActive ? "text-geek-400" : ""
+//           }
+//         >
+//           对话
+//         </NavLink>
+//       </Menu.Item>
+//       <Menu.Item key="3">
+//         <NavLink
+//           to="/upload"
+//           className={({ isActive, isPending }) =>
+//             isPending ? "pending" : isActive ? "text-geek-400" : ""
+//           }
+//         >
+//           上传
+//         </NavLink>
+//       </Menu.Item>
+//     </Menu>
+//   );
+// };
 
 function PageNav() {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -56,6 +59,7 @@ function PageNav() {
   const { user, accessToken, setAccessToken, setCurrentUser } = useAuth();
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -64,7 +68,11 @@ function PageNav() {
           onClick={() => {
             setAccessToken("");
             setCurrentUser(null);
-            navigate("/login");
+            queryClient.clear();
+            messageApi.success("登出成功, 即将跳转到登录页");
+            setTimeout(() => {
+              navigate("/login");
+            }, 1500);
           }}
         >
           登出
@@ -88,6 +96,7 @@ function PageNav() {
         borderBottom: "1px solid #f0f0f0",
       }}
     >
+      {contextHolder}
       {/* <div className="demo-logo" /> */}
       <Link to="/" className="  flex items-center gap-2">
         <img
@@ -137,6 +146,19 @@ function PageNav() {
           >
             <span className="text-base">上传</span>
           </NavLink>
+
+          {user?.user_role === 1 && (
+            <NavLink
+              to="/admin"
+              className={({ isActive }) =>
+                isActive
+                  ? "active border-bottom border-b-2 border-b-geek-400 text-geek-400"
+                  : ""
+              }
+            >
+              <span className="text-base">管理</span>
+            </NavLink>
+          )}
         </div>
         {/* // 如果用户未登录，显示登录按钮 */}
         {accessToken ? (

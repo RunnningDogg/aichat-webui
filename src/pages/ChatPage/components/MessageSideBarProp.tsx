@@ -54,6 +54,10 @@ type MenuItemProps = {
 };
 
 function MessageSideBar({ chatfile, menuActiveIdx }: MessageSideBarProps) {
+  // 新增逻辑, 如果有useParams有file_id, 那么就设置为active
+
+  console.log("activeIdx", menuActiveIdx);
+
   const navigate = useNavigate();
 
   // menu click handler
@@ -195,13 +199,13 @@ function MessageSideBar({ chatfile, menuActiveIdx }: MessageSideBarProps) {
         />
       </div>
       {/* 创建按钮 */}
-      {!collapsed && (
+      {/* {!collapsed && (
         <div className="flex justify-center p-2">
           <Button icon={<PlusOutlined />} block={true} size="large">
             Create Chat
           </Button>
         </div>
-      )}
+      )} */}
 
       {/* <Menu
         mode="inline"
